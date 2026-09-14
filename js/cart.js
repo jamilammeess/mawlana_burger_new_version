@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // رقم واتساب المطعم
     // يجب أن يكون بدون (+) وبدون مسافات
-    const WHATSAPP_NUMBER = "+963940015220";
+    const WHATSAPP_NUMBER = "+963980517535";
 
 
     /* =========================
