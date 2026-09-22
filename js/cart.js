@@ -7,7 +7,83 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // رقم واتساب المطعم
     // يجب أن يكون بدون (+) وبدون مسافات
-    const WHATSAPP_NUMBER = "+963980517535";
+    const WHATSAPP_NUMBER = "963980517535";
+
+
+    /* =========================
+       GOOGLE ANALYTICS
+    ========================== */
+
+    /*
+     * إرسال Event إلى Google Analytics
+     *
+     * لا يتم إرسال:
+     * - اسم الزبون
+     * - رقم الهاتف
+     * - العنوان
+     * - الملاحظات
+     */
+
+    function trackEvent(eventName, parameters = {}) {
+
+        if (typeof window.gtag !== "function") {
+            return;
+        }
+
+        try {
+
+            window.gtag(
+                "event",
+                eventName,
+                parameters
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Google Analytics event error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * تجهيز منتجات السلة بالشكل المناسب
+     * لـ Google Analytics Ecommerce
+     */
+
+    function getAnalyticsItems() {
+
+        return cart.map(function (item) {
+
+            return {
+
+                item_id:
+                    String(item.id || ""),
+
+                item_name:
+                    String(item.name || "منتج"),
+
+                price:
+                    safeNumber(
+                        item.price,
+                        0
+                    ),
+
+                quantity:
+                    safeNumber(
+                        item.quantity,
+                        1
+                    )
+
+            };
+
+        });
+
+    }
 
 
     /* =========================
@@ -15,8 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================== */
 
     // السلة تبدأ فارغة مع كل جلسة جديدة.
-    // لا يوجد localStorage حتى لا تنتقل طلبات
-    // الزبون السابق إلى الزبون الجديد.
     let cart = [];
 
 
@@ -165,10 +239,6 @@ document.addEventListener("DOMContentLoaded", function () {
             getCartCount();
 
 
-        /*
-         * النص الموجود داخل زر السلة
-         */
-
         if (cartCount) {
 
             if (count === 0) {
@@ -199,10 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * الرقم الموجود على Badge
-         */
-
         if (cartBadge) {
 
             cartBadge.textContent =
@@ -210,10 +276,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
-        /*
-         * حالة زر السلة
-         */
 
         if (floatingCart) {
 
@@ -249,9 +311,12 @@ document.addEventListener("DOMContentLoaded", function () {
             String(product.id);
 
 
-        /*
-         * البحث عن المنتج إذا كان موجودًا
-         */
+        const productPrice =
+            safeNumber(
+                product.price,
+                0
+            );
+
 
         const existingProduct =
             cart.find(
@@ -265,8 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         /*
-         * إذا كان المنتج موجودًا
-         * نزيد الكمية فقط
+         * المنتج موجود مسبقًا
          */
 
         if (existingProduct) {
@@ -277,11 +341,42 @@ document.addEventListener("DOMContentLoaded", function () {
                     0
                 ) + 1;
 
+
+            /*
+             * Analytics:
+             * إضافة كمية جديدة للمنتج
+             */
+
+            trackEvent(
+                "add_to_cart",
+                {
+                    currency: "SYP",
+
+                    value: productPrice,
+
+                    items: [
+                        {
+                            item_id: productId,
+
+                            item_name:
+                                String(
+                                    product.name ||
+                                    "منتج"
+                                ),
+
+                            price: productPrice,
+
+                            quantity: 1
+                        }
+                    ]
+                }
+            );
+
         }
 
 
         /*
-         * إذا كان جديدًا
+         * المنتج جديد
          */
 
         else {
@@ -296,10 +391,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     ),
 
                 price:
-                    safeNumber(
-                        product.price,
-                        0
-                    ),
+                    productPrice,
 
                 image:
                     product.image
@@ -310,19 +402,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
+
+            /*
+             * Analytics:
+             * إضافة منتج جديد
+             */
+
+            trackEvent(
+                "add_to_cart",
+                {
+                    currency: "SYP",
+
+                    value: productPrice,
+
+                    items: [
+                        {
+                            item_id: productId,
+
+                            item_name:
+                                String(
+                                    product.name ||
+                                    "منتج"
+                                ),
+
+                            price: productPrice,
+
+                            quantity: 1
+                        }
+                    ]
+                }
+            );
+
         }
 
 
-        /*
-         * إعادة رسم السلة
-         */
-
         renderCart();
-
-
-        /*
-         * حركة زر السلة
-         */
 
         showAddAnimation();
 
@@ -335,6 +449,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function removeFromCart(productId) {
 
+        const product =
+            cart.find(
+                function (item) {
+
+                    return String(item.id) ===
+                        String(productId);
+
+                }
+            );
+
+
+        /*
+         * تسجيل الحذف قبل حذف المنتج
+         */
+
+        if (product) {
+
+            trackEvent(
+                "remove_from_cart",
+                {
+                    currency: "SYP",
+
+                    value:
+                        safeNumber(
+                            product.price,
+                            0
+                        ) *
+                        safeNumber(
+                            product.quantity,
+                            1
+                        ),
+
+                    items: [
+                        {
+                            item_id:
+                                String(
+                                    product.id
+                                ),
+
+                            item_name:
+                                String(
+                                    product.name ||
+                                    "منتج"
+                                ),
+
+                            price:
+                                safeNumber(
+                                    product.price,
+                                    0
+                                ),
+
+                            quantity:
+                                safeNumber(
+                                    product.quantity,
+                                    1
+                                )
+                        }
+                    ]
+                }
+            );
+
+        }
+
+
         cart = cart.filter(
             function (item) {
 
@@ -344,10 +522,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
 
-
-        /*
-         * تحديث السلة مباشرة
-         */
 
         renderCart();
 
@@ -383,6 +557,48 @@ document.addEventListener("DOMContentLoaded", function () {
                 product.quantity,
                 0
             ) + 1;
+
+
+        /*
+         * Analytics
+         */
+
+        trackEvent(
+            "quantity_change",
+            {
+                currency: "SYP",
+
+                change_type: "increase",
+
+                value:
+                    safeNumber(
+                        product.price,
+                        0
+                    ),
+
+                items: [
+                    {
+                        item_id:
+                            String(product.id),
+
+                        item_name:
+                            String(
+                                product.name ||
+                                "منتج"
+                            ),
+
+                        price:
+                            safeNumber(
+                                product.price,
+                                0
+                            ),
+
+                        quantity:
+                            product.quantity
+                    }
+                ]
+            }
+        );
 
 
         renderCart();
@@ -421,25 +637,58 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-        /*
-         * إذا كانت الكمية أكثر من 1
-         * ننقص واحدة
-         */
-
         if (currentQuantity > 1) {
 
             product.quantity =
                 currentQuantity - 1;
 
+
+            /*
+             * Analytics
+             */
+
+            trackEvent(
+                "quantity_change",
+                {
+                    currency: "SYP",
+
+                    change_type: "decrease",
+
+                    value:
+                        safeNumber(
+                            product.price,
+                            0
+                        ),
+
+                    items: [
+                        {
+                            item_id:
+                                String(product.id),
+
+                            item_name:
+                                String(
+                                    product.name ||
+                                    "منتج"
+                                ),
+
+                            price:
+                                safeNumber(
+                                    product.price,
+                                    0
+                                ),
+
+                            quantity:
+                                product.quantity
+                        }
+                    ]
+                }
+            );
+
+
             renderCart();
 
         }
 
-
-        /*
-         * إذا كانت الكمية = 1
-         * نحذف المنتج بالكامل
-         */
 
         else {
 
@@ -463,16 +712,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * تفريغ المحتوى القديم
-         */
-
         cartItems.innerHTML = "";
 
-
-        /*
-         * السلة فارغة
-         */
 
         if (cart.length === 0) {
 
@@ -489,10 +730,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * السلة تحتوي على منتجات
-         */
-
         else {
 
             if (cartEmpty) {
@@ -507,10 +744,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 "flex";
 
 
-            /*
-             * رسم كل منتج
-             */
-
             cart.forEach(
                 function (item) {
 
@@ -521,10 +754,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     cartItem.className =
                         "cart-item";
 
-
-                    /*
-                     * البيانات الآمنة
-                     */
 
                     const itemId =
                         escapeHTML(
@@ -565,10 +794,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         price * quantity;
 
 
-                    /*
-                     * صورة المنتج
-                     */
-
                     const imageHTML =
                         itemImage
                             ? `
@@ -597,10 +822,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </span>
                               `;
 
-
-                    /*
-                     * HTML الخاص بالمنتج
-                     */
 
                     cartItem.innerHTML = `
                         <div class="cart-item-image">
@@ -685,10 +906,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     `;
 
 
-                    /*
-                     * إضافة المنتج إلى السلة
-                     */
-
                     cartItems.appendChild(
                         cartItem
                     );
@@ -699,10 +916,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * تحديث الإجمالي
-         */
-
         if (cartTotal) {
 
             cartTotal.textContent =
@@ -712,10 +925,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
-        /*
-         * تحديث العداد
-         */
 
         updateCartCounter();
 
@@ -757,10 +966,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /*
-                 * زيادة الكمية
-                 */
-
                 if (
                     button.classList.contains(
                         "increase-btn"
@@ -774,10 +979,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /*
-                 * إنقاص الكمية
-                 */
-
                 else if (
                     button.classList.contains(
                         "decrease-btn"
@@ -790,10 +991,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 }
 
-
-                /*
-                 * حذف المنتج بالكامل
-                 */
 
                 else if (
                     button.classList.contains(
@@ -847,10 +1044,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /*
-                     * استخراج بيانات المنتج
-                     */
-
                     const product = {
 
                         id:
@@ -867,10 +1060,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     };
 
-
-                    /*
-                     * التحقق من البيانات
-                     */
 
                     if (
                         !product.id ||
@@ -889,10 +1078,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /*
-                     * التحقق من السعر
-                     */
-
                     if (
                         !Number.isFinite(
                             Number(product.price)
@@ -909,21 +1094,65 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
 
-                    /*
-                     * إضافة المنتج
-                     */
-
                     addToCart(
                         product
                     );
 
 
-                    /*
-                     * حركة زر الإضافة
-                     */
-
                     animateButton(
                         button
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================
+       CATEGORY ANALYTICS
+    ========================== */
+
+    const categoryLinks =
+        document.querySelectorAll(
+            ".categories .category"
+        );
+
+
+    categoryLinks.forEach(
+        function (categoryLink) {
+
+            categoryLink.addEventListener(
+                "click",
+                function () {
+
+                    const categoryName =
+                        categoryLink
+                            .querySelector("span:last-child");
+
+                    const categoryText =
+                        categoryName
+                            ? categoryName.textContent.trim()
+                            : categoryLink.textContent.trim();
+
+
+                    const categoryId =
+                        (
+                            categoryLink.getAttribute("href") ||
+                            ""
+                        ).replace("#", "");
+
+
+                    trackEvent(
+                        "category_click",
+                        {
+                            category_name:
+                                categoryText,
+
+                            category_id:
+                                categoryId
+                        }
                     );
 
                 }
@@ -946,24 +1175,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * حفظ النص الأصلي
-         */
-
         const originalText =
             button.innerHTML;
 
 
-        /*
-         * منع الضغط المتكرر
-         */
-
         button.disabled = true;
 
-
-        /*
-         * تغيير التصميم
-         */
 
         button.classList.add(
             "added"
@@ -973,10 +1190,6 @@ document.addEventListener("DOMContentLoaded", function () {
         button.innerHTML =
             "✓ تمت الإضافة";
 
-
-        /*
-         * إعادة الزر إلى حالته الأصلية
-         */
 
         setTimeout(
             function () {
@@ -1013,25 +1226,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * إزالة الحركة القديمة
-         */
-
         floatingCart.classList.remove(
             "cart-bounce"
         );
 
 
-        /*
-         * إجبار المتصفح على إعادة تشغيل animation
-         */
-
         void floatingCart.offsetWidth;
 
-
-        /*
-         * تشغيل الحركة
-         */
 
         floatingCart.classList.add(
             "cart-bounce"
@@ -1069,25 +1270,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                /*
-                 * تحديث السلة قبل فتحها
-                 */
-
                 renderCart();
 
 
                 /*
+                 * Analytics:
                  * فتح السلة
                  */
+
+                trackEvent(
+                    "view_cart",
+                    {
+                        currency: "SYP",
+
+                        value:
+                            getCartTotal(),
+
+                        items:
+                            getAnalyticsItems()
+                    }
+                );
+
 
                 cartOverlay.classList.add(
                     "show"
                 );
 
-
-                /*
-                 * منع تمرير الصفحة بالخلفية
-                 */
 
                 document.body.style.overflow =
                     "hidden";
@@ -1111,10 +1319,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /*
-     * إغلاق عند الضغط خارج السلة
-     */
 
     if (cartOverlay) {
 
@@ -1355,10 +1559,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "🛒 *تفاصيل الطلب:*\n\n";
 
 
-        /*
-         * إضافة كل المنتجات
-         */
-
         cart.forEach(
             function (item, index) {
 
@@ -1411,10 +1611,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "\n\n";
 
 
-        /*
-         * الملاحظات إذا كانت موجودة
-         */
-
         if (customer.notes) {
 
             message +=
@@ -1460,6 +1656,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (cart.length === 0) {
 
+            /*
+             * Analytics:
+             * محاولة طلب بدون منتجات
+             */
+
+            trackEvent(
+                "empty_order_attempt"
+            );
+
+
             alert(
                 "سلة الطلب فارغة 🛒\n\nأضف المنتجات أولاً."
             );
@@ -1487,9 +1693,49 @@ document.addEventListener("DOMContentLoaded", function () {
             )
         ) {
 
+            /*
+             * لا نرسل أي بيانات شخصية إلى Analytics.
+             */
+
             return;
 
         }
+
+
+        /*
+         * Analytics:
+         * بدأ المستخدم عملية الطلب
+         *
+         * ملاحظة:
+         * لا نرسل بيانات الزبون.
+         */
+
+        trackEvent(
+            "begin_checkout",
+            {
+                currency: "SYP",
+
+                value:
+                    getCartTotal(),
+
+                items:
+                    getAnalyticsItems()
+            }
+        );
+
+
+        /*
+         * حفظ بيانات Analytics قبل تفريغ السلة
+         */
+
+        const analyticsItems =
+            getAnalyticsItems();
+
+        const analyticsTotal =
+            getCartTotal();
+
+        const analyticsItemCount =
+            getCartCount();
 
 
         /*
@@ -1529,36 +1775,45 @@ document.addEventListener("DOMContentLoaded", function () {
         if (whatsappWindow) {
 
             /*
+             * Analytics:
+             * تم الوصول فعليًا إلى خطوة إرسال الطلب
+             */
+
+            trackEvent(
+                "whatsapp_order",
+                {
+                    currency: "SYP",
+
+                    value:
+                        analyticsTotal,
+
+                    items_count:
+                        analyticsItemCount,
+
+                    items:
+                        analyticsItems,
+
+                    order_channel:
+                        "whatsapp"
+                }
+            );
+
+
+            /*
              * تفريغ السلة
              */
 
             cart = [];
 
 
-            /*
-             * إعادة رسم السلة
-             */
-
             renderCart();
 
-
-            /*
-             * مسح بيانات الزبون
-             */
 
             clearCustomerForm();
 
 
-            /*
-             * إغلاق نافذة السلة
-             */
-
             closeCartPanel();
 
-
-            /*
-             * إعلام الزبون
-             */
 
             setTimeout(
                 function () {
@@ -1581,8 +1836,23 @@ document.addEventListener("DOMContentLoaded", function () {
         else {
 
             /*
-             * لا نحذف السلة
+             * Analytics:
+             * تعذر فتح واتساب
              */
+
+            trackEvent(
+                "whatsapp_open_failed",
+                {
+                    currency: "SYP",
+
+                    value:
+                        analyticsTotal,
+
+                    items_count:
+                        analyticsItemCount
+                }
+            );
+
 
             alert(
                 "تعذر فتح واتساب تلقائيًا.\n\nيرجى السماح بالنوافذ المنبثقة لهذا الموقع ثم المحاولة مرة أخرى."
@@ -1657,17 +1927,6 @@ document.addEventListener("DOMContentLoaded", function () {
        EDIT ORDER VIA WHATSAPP
     ========================== */
 
-    /*
-     * اختياري:
-     *
-     * إذا كان لديك زر في HTML بهذا الشكل:
-     *
-     * id="editOrderWhatsApp"
-     *
-     * فسيتم فتح واتساب برسالة خاصة
-     * لطلب تعديل الطلب.
-     */
-
     const editOrderWhatsApp =
         document.getElementById(
             "editOrderWhatsApp"
@@ -1679,6 +1938,20 @@ document.addEventListener("DOMContentLoaded", function () {
         editOrderWhatsApp.addEventListener(
             "click",
             function () {
+
+                /*
+                 * Analytics:
+                 * طلب تعديل عبر WhatsApp
+                 */
+
+                trackEvent(
+                    "edit_order_whatsapp",
+                    {
+                        order_channel:
+                            "whatsapp"
+                    }
+                );
+
 
                 const message =
                     "مرحباً مولانا برغر 👋\n\n" +
@@ -1707,26 +1980,12 @@ document.addEventListener("DOMContentLoaded", function () {
        INITIAL LOAD
     ========================== */
 
-    /*
-     * التأكيد أن السلة جديدة وفارغة
-     * عند كل تحميل للموقع.
-     */
-
     cart = [];
 
-
-    /*
-     * رسم السلة
-     */
 
     renderCart();
 
 
-    /*
-     * تحديث العداد
-     */
-
     updateCartCounter();
 
 });
-
