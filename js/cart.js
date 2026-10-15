@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "m4-burger",
             name: "M4 برغر",
             englishName: "M4 BURGER",
-            price: 550,
+            price: 600,
             image: "images/burgers/M4.png",
             description: "قطعة من اللحم مع البصل المكرمل والجبن والصوص الحار الخاص",
             isNew: true,
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "Crispy_fay-burger",
             name: "كرسيبي فاي",
             englishName: "Crispy Fay BURGER",
-            price: 350,
+            price: 480,
             image: "images/burgers/crispyFay_burger.png",
             description: "الدجاج المقرمش مع الخس والجبن والصوص الخاص",
             alt: "كريسبي فاي"
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const mealsList = [
         {
             id: "mawlana-meal",
-            name: "وجبة مولانا",
+            name: " وجبة مولانا الدبل",
             englishName: "MAWLANA MEAL",
             price: 750,
             image: "images/meals/meal1.png",
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "mohito-strawberry",
             name: "موهيتو بطعم الفريز",
             englishName: "MOHITO STRAWBERRY",
-            price: 300,
+            price: 200,
             image: "images/drinks/mohito.jpg",
             alt: "موهيتو بطعم الفريز"
         },
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "passion-juice",
             name: "عصير بنكهة فاكهة الباشون الطازجة",
             englishName: "PASSION JUICE",
-            price: 300,
+            price: 200,
             image: "images/drinks/bation.jpg",
             alt: "عصير باشون"
         },
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: "ocean-juice",
             name: "العصير الأزرق المنعش بنكهة المحيط",
             englishName: "OCEAN JUICE",
-            price: 300,
+            price: 200,
             image: "images/drinks/blueSerron.jpg",
             alt: "العصير الأزرق"
         }
@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
             id: "sprite",
             name: "سبرايت",
-            price: 90
+            price: 100
         },
         {
             id: "water",
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
             id: "cola-can",
             name: "بيبسي / كولا تنك",
-            price: 90
+            price: 100
         }
     ];
 
