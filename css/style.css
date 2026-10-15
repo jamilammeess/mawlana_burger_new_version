@@ -3643,4 +3643,48 @@ a {
         transition-duration:
             0.01ms !important;
     }
+    
+/* تأثير نجاح إضافة المنتج إلى الطلب */
+.add-to-cart-btn.added-success,
+.small-add-to-cart-btn.added-success,
+.drink-add-btn.added-success {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #ffffff !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* إشارة الصح */
+.add-to-cart-btn .success-check,
+.small-add-to-cart-btn .success-check,
+.drink-add-btn .success-check {
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: 900;
+    font-size: 1.1em;
+}
+
+/* حالة زر قسم المنيو المحدد */
+.category.active {
+    color: #ffffff !important;
+    background: #7C0434 !important;
+    border-color: #7C0434 !important;
+    box-shadow: 0 0 0 3px rgba(124, 4, 52, 0.18) !important;
+    transition: all 0.25s ease;
+}
+
+/* تأثير عند مرور المؤشر */
+.category {
+    transition: all 0.25s ease;
+}
+
+/* الزر المحدد في فلترة أقسام المنيو */
+.category.active {
+    color: #ffffff !important;
+    background-color: #7C0434 !important;
+    border-color: #7C0434 !important;
+    box-shadow: 0 0 0 3px rgba(124, 4, 52, 0.18) !important;
+    transition: all 0.25s ease;
+}
+
 }

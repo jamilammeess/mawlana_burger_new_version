@@ -1,1991 +1,834 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
 
-    /* =========================
-       SETTINGS
-    ========================== */
+    /* =====================================================
+       1. قوائم المنتجات
+    ===================================================== */
 
-    // رقم واتساب المطعم
-    // يجب أن يكون بدون (+) وبدون مسافات
+    const burgersList = [
+        {
+            id: "mawlana-burger",
+            name: "مولانا برغر",
+            englishName: "MAWLANA BURGER",
+            price: 600,
+            image: "images/burgers/mawlana_burger.png",
+            description: "قطعتين من اللحم مع الخس والجبن والصوص الخاص",
+            isNew: false,
+            isFeatured: true,
+            badge: "الأكثر طلباً",
+            alt: "مولانا برغر"
+        },
+        {
+            id: "m4-burger",
+            name: "M4 برغر",
+            englishName: "M4 BURGER",
+            price: 550,
+            image: "images/burgers/M4.png",
+            description: "قطعة من اللحم مع البصل المكرمل والجبن والصوص الحار الخاص",
+            isNew: true,
+            isFeatured: true,
+            badge: "",
+            alt: "M4 برغر"
+        },
+        {
+            id: "chicken-in-burger",
+            name: "تشكن ان برغر",
+            englishName: "CHICKEN IN BURGER",
+            price: 550,
+            image: "images/burgers/chikenIN.png",
+            description: "قطعتين من الدجاج مع الطماطم والجبن والصوص الحار الخاص",
+            isNew: true,
+            isFeatured: true,
+            badge: "",
+            alt: "تشكن ان برغر"
+        },
+        {
+            id: "dynamite-shrimp-burger",
+            name: "داينمت شريمب",
+            englishName: "DYNAMITE SHRIMP BURGER",
+            price: 600,
+            image: "images/burgers/daynamet shrimp.png",
+            description: "الروبيان المقلي مع البطاطا وصوص الداينمت الخاص",
+            alt: "داينمت شريمب",
+            isNew: true,
+            isFeatured: false,
+            badge: ""
+        },
+        {
+            id: "classic-burger",
+            name: "كلاسيك برغر",
+            englishName: "CLASSIC BURGER",
+            price: 500,
+            image: "images/burgers/classic.png",
+            description: "قطعة لحم بقري مشوية مع جبنة وخس وطماطم وبصل وصوص البرغر الخاص",
+            isNew: false,
+            isFeatured: false,
+            badge: "",
+            alt: "كلاسيك برغر"
+        },
+        {
+            id: "sanofghan-burger",
+            name: "صن اف غن برغر",
+            englishName: "SANOFGHAN BURGER",
+            price: 600,
+            image: "images/burgers/sanofghan.png",
+            description: "قطعتين من الدجاج مع شريحتين من الجبن والصوص الخاص وهالبينو وذرة مغطاة",
+            isNew: false,
+            isFeatured: false,
+            badge: "",
+            alt: "صن اف غن برغر"
+        },
+        {
+            id: "dynamite-fries-burger",
+            name: "داينمت فرايز",
+            englishName: "DYNAMITE FRIES BURGER",
+            price: 350,
+            image: "images/burgers/dainametFraiz.png",
+            description: "الدجاج المقرمش مع البطاطا وصوص الداينمت الخاص",
+            alt: "داينمت فرايز"
+        },
+         {
+            id: "Crispy_fay-burger",
+            name: "كرسيبي فاي",
+            englishName: "Crispy Fay BURGER",
+            price: 350,
+            image: "images/burgers/crispyFay_burger.png",
+            description: "الدجاج المقرمش مع الخس والجبن والصوص الخاص",
+            alt: "كريسبي فاي"
+        },
+        {
+            id: "mawlana-fries-burger",
+            name: "مولانا فرايز",
+            englishName: "MAWLANA FRIES BURGER",
+            price: 270,
+            image: "images/burgers/fraiz.png",
+            description: "البطاطا المقرمشة مع الجبن السائل وصوص مولانا الخاص",
+            alt: "مولانا فرايز"
+        },
+        {
+            id: "salted-fries-burger",
+            name: "سولتد فرايز",
+            englishName: "SALTED FRIES BURGER",
+            price: 160,
+            image: "images/burgers/fraizm.png",
+            description: "البطاطا المقرمشة مع الملح وصوص البرغر الخاص",
+            alt: "سولتد فرايز"
+        },
+        {
+            id: "potato-sandwich-burger",
+            name: "سندويش بطاطا",
+            englishName: "POTATO SANDWICH",
+            price: 250,
+            image: "images/burgers/botatoSandwish.png",
+            description: "البطاطا مع خبز السمون والجبن السائل والصوص الخاص",
+            alt: "سندويش بطاطا"
+        }
+    ];
+
+    const mealsList = [
+        {
+            id: "mawlana-meal",
+            name: "وجبة مولانا",
+            englishName: "MAWLANA MEAL",
+            price: 750,
+            image: "images/meals/meal1.png",
+            description: "وجبة الدجاج الدبل أو اللحم مع بطاطا وعلبة صوص",
+            alt: "وجبة مولانا"
+        },
+        {
+            id: "mawlana-classic-meal",
+            name: "وجبة مولانا كلاسيك",
+            englishName: "MAWLANA CLASSIC MEAL",
+            price: 650,
+            image: "images/meals/meal1.png",
+            description: "وجبة الدجاج الكلاسيك أو اللحم مع بطاطا وصوص",
+            alt: "وجبة مولانا كلاسيك"
+        }
+    ];
+
+    const specialDrinksList = [
+        {
+            id: "mohito-strawberry",
+            name: "موهيتو بطعم الفريز",
+            englishName: "MOHITO STRAWBERRY",
+            price: 300,
+            image: "images/drinks/mohito.jpg",
+            alt: "موهيتو بطعم الفريز"
+        },
+        {
+            id: "passion-juice",
+            name: "عصير بنكهة فاكهة الباشون الطازجة",
+            englishName: "PASSION JUICE",
+            price: 300,
+            image: "images/drinks/bation.jpg",
+            alt: "عصير باشون"
+        },
+        {
+            id: "ocean-juice",
+            name: "العصير الأزرق المنعش بنكهة المحيط",
+            englishName: "OCEAN JUICE",
+            price: 300,
+            image: "images/drinks/blueSerron.jpg",
+            alt: "العصير الأزرق"
+        }
+    ];
+
+    const drinksList = [
+        {
+            id: "cola-liter",
+            name: "كولا ليتر",
+            price: 110
+        },
+        {
+            id: "sprite",
+            name: "سبرايت",
+            price: 90
+        },
+        {
+            id: "water",
+            name: "ماء",
+            price: 50
+        },
+        {
+            id: "cola-can",
+            name: "بيبسي / كولا تنك",
+            price: 90
+        }
+    ];
+
+    /* =====================================================
+       2. الإعدادات
+    ===================================================== */
+
     const WHATSAPP_NUMBER = "963980517535";
 
+    /* =====================================================
+       3. العناصر الأساسية
+    ===================================================== */
 
-    /* =========================
-       GOOGLE ANALYTICS
-    ========================== */
-
-    /*
-     * إرسال Event إلى Google Analytics
-     *
-     * لا يتم إرسال:
-     * - اسم الزبون
-     * - رقم الهاتف
-     * - العنوان
-     * - الملاحظات
-     */
-
-    function trackEvent(eventName, parameters = {}) {
-
-        if (typeof window.gtag !== "function") {
-            return;
-        }
-
-        try {
-
-            window.gtag(
-                "event",
-                eventName,
-                parameters
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "Google Analytics event error:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /*
-     * تجهيز منتجات السلة بالشكل المناسب
-     * لـ Google Analytics Ecommerce
-     */
-
-    function getAnalyticsItems() {
-
-        return cart.map(function (item) {
-
-            return {
-
-                item_id:
-                    String(item.id || ""),
-
-                item_name:
-                    String(item.name || "منتج"),
-
-                price:
-                    safeNumber(
-                        item.price,
-                        0
-                    ),
-
-                quantity:
-                    safeNumber(
-                        item.quantity,
-                        1
-                    )
-
-            };
-
-        });
-
-    }
-
-
-    /* =========================
-       CART DATA
-    ========================== */
-
-    // السلة تبدأ فارغة مع كل جلسة جديدة.
     let cart = [];
 
+    const $ = selector => document.querySelector(selector);
 
-    /* =========================
-       ELEMENTS
-    ========================== */
+    const floatingCart = $("#floatingCart");
+    const cartOverlay = $("#cartOverlay");
+    const cartPanel = $("#cartPanel");
+    const closeCartButton = $("#closeCart");
+    const cartItemsElement = $("#cartItems");
+    const cartEmpty = $("#cartEmpty");
+    const cartCount = $("#cartCount");
+    const cartBadge = $("#cartBadge");
+    const cartTotal = $("#cartTotal");
+    const whatsappOrder = $("#whatsappOrder");
 
-    const floatingCart =
-        document.getElementById("floatingCart");
-
-    const cartOverlay =
-        document.getElementById("cartOverlay");
-
-    const closeCart =
-        document.getElementById("closeCart");
-
-    const cartItems =
-        document.getElementById("cartItems");
-
-    const cartEmpty =
-        document.getElementById("cartEmpty");
-
-    const cartCount =
-        document.getElementById("cartCount");
-
-    const cartBadge =
-        document.getElementById("cartBadge");
-
-    const cartTotal =
-        document.getElementById("cartTotal");
-
-    const whatsappOrder =
-        document.getElementById("whatsappOrder");
-
-
-    /* =========================
-       SAFE NUMBER
-    ========================== */
+    /* =====================================================
+       4. الدوال المساعدة
+    ===================================================== */
 
     function safeNumber(value, fallback = 0) {
-
         const number = Number(value);
-
-        return Number.isFinite(number)
-            ? number
-            : fallback;
-
+        return Number.isFinite(number) ? number : fallback;
     }
 
-
-    /* =========================
-       ESCAPE HTML
-    ========================== */
-
     function escapeHTML(value) {
-
         return String(value ?? "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
-
     }
 
-
-    /* =========================
-       FORMAT PRICE
-    ========================== */
-
-    function formatPrice(price) {
-
-        const numericPrice =
-            safeNumber(price);
-
-        return (
-            numericPrice.toLocaleString("ar") +
-            " ل.س"
-        );
-
+    function formatPrice(value) {
+        return `${safeNumber(value).toLocaleString("en-US")} ل.س`;
     }
 
+    function trackEvent(eventName, parameters = {}) {
+        if (typeof window.gtag === "function") {
+            try {
+                window.gtag("event", eventName, parameters);
+            } catch (error) {
+                console.warn("Google Analytics error:", error);
+            }
+        }
+    }
 
-    /* =========================
-       GET CART COUNT
-    ========================== */
+    /* =====================================================
+       5. عرض البرغر والوجبات
+    ===================================================== */
+
+    function renderMainProduct(product) {
+        const id = escapeHTML(product.id);
+        const name = escapeHTML(product.name);
+        const englishName = escapeHTML(product.englishName || "");
+        const description = escapeHTML(product.description || "");
+        const image = escapeHTML(product.image || "");
+        const alt = escapeHTML(product.alt || product.name);
+        const price = safeNumber(product.price);
+
+        let badge = "";
+
+        if (product.isNew) {
+            badge = '<span class="product-badge new">جديد</span>';
+        } else if (product.badge) {
+            badge = `<span class="product-badge">${escapeHTML(product.badge)}</span>`;
+        }
+
+        const featuredClass = product.isFeatured ? " featured" : "";
+
+        return `
+            <article
+                class="product-card${featuredClass}"
+                data-id="${id}"
+                data-name="${name}"
+                data-price="${price}"
+                data-image="${image}">
+
+                <div class="product-image">
+                    ${badge}
+                    <img src="${image}" alt="${alt}" loading="lazy">
+                </div>
+
+                <div class="product-info">
+                    <div class="product-title">
+                        <div>
+                            <h3>${name}</h3>
+                            ${englishName ? `<span>${englishName}</span>` : ""}
+                        </div>
+                        <strong>${formatPrice(price)}</strong>
+                    </div>
+
+                    ${description ? `<p>${description}</p>` : ""}
+
+                    <button class="add-to-cart-btn" type="button">
+                        <span>🛒</span>
+                        أضف إلى الطلب
+                    </button>
+                </div>
+            </article>
+        `;
+    }
+
+    /* =====================================================
+       6. المشروبات المميزة
+    ===================================================== */
+
+    function renderSpecialDrink(product) {
+        const id = escapeHTML(product.id);
+        const name = escapeHTML(product.name);
+        const englishName = escapeHTML(product.englishName || "");
+        const image = escapeHTML(product.image || "");
+        const alt = escapeHTML(product.alt || product.name);
+        const price = safeNumber(product.price);
+
+        return `
+            <article
+                class="small-product"
+                data-id="${id}"
+                data-name="${name}"
+                data-price="${price}"
+                data-image="${image}">
+
+                <div class="small-product-image">
+                    <img src="${image}" alt="${alt}" loading="lazy">
+                </div>
+
+                <div class="small-product-info">
+                    <h3>${name}</h3>
+                    ${englishName ? `<span>${englishName}</span>` : ""}
+                </div>
+
+                <strong>${formatPrice(price)}</strong>
+
+                <button
+                    class="small-add-to-cart-btn"
+                    type="button"
+                    aria-label="إضافة ${name} إلى الطلب">+</button>
+            </article>
+        `;
+    }
+
+    /* =====================================================
+       7. المشروبات العادية
+    ===================================================== */
+
+    function renderDrink(product) {
+        const id = escapeHTML(product.id);
+        const name = escapeHTML(product.name);
+        const price = safeNumber(product.price);
+
+        return `
+            <article
+                class="drink-item"
+                data-id="${id}"
+                data-name="${name}"
+                data-price="${price}">
+
+                <span>${name}</span>
+                <strong>${formatPrice(price)}</strong>
+
+                <button
+                    class="drink-add-btn"
+                    type="button"
+                    aria-label="إضافة ${name} إلى الطلب">+</button>
+            </article>
+        `;
+    }
+
+    /* =====================================================
+       8. عرض قوائم المنتجات
+    ===================================================== */
+
+    function renderProductList(list, containerId, renderer) {
+        const container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error(`لم يتم العثور على العنصر: ${containerId}`);
+            return;
+        }
+
+        container.innerHTML = list.map(renderer).join("");
+    }
+
+    renderProductList(burgersList, "burgersGrid", renderMainProduct);
+    renderProductList(mealsList, "mealsGrid", renderMainProduct);
+    renderProductList(specialDrinksList, "specialDrinksGrid", renderSpecialDrink);
+    renderProductList(drinksList, "drinksGrid", renderDrink);
+
+    /* =====================================================
+       9. حسابات السلة
+    ===================================================== */
 
     function getCartCount() {
-
-        return cart.reduce(
-            function (total, item) {
-
-                const quantity =
-                    safeNumber(
-                        item.quantity,
-                        0
-                    );
-
-                return total + quantity;
-
-            },
-            0
-        );
-
+        return cart.reduce((sum, item) => sum + item.quantity, 0);
     }
-
-
-    /* =========================
-       GET CART TOTAL
-    ========================== */
 
     function getCartTotal() {
-
-        return cart.reduce(
-            function (total, item) {
-
-                const price =
-                    safeNumber(
-                        item.price,
-                        0
-                    );
-
-                const quantity =
-                    safeNumber(
-                        item.quantity,
-                        0
-                    );
-
-                return total +
-                    (price * quantity);
-
-            },
-            0
-        );
-
+        return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
-
-
-    /* =========================
-       UPDATE CART COUNTER
-    ========================== */
 
     function updateCartCounter() {
-
-        const count =
-            getCartCount();
-
+        const count = getCartCount();
 
         if (cartCount) {
-
-            if (count === 0) {
-
-                cartCount.textContent =
-                    "السلة فارغة";
-
-            } else if (count === 1) {
-
-                cartCount.textContent =
-                    "صنف واحد";
-
-            } else if (
-                count >= 2 &&
-                count <= 10
-            ) {
-
-                cartCount.textContent =
-                    count + " أصناف";
-
-            } else {
-
-                cartCount.textContent =
-                    count + " صنف";
-
-            }
-
+            cartCount.textContent = `${count} أصناف`;
         }
-
 
         if (cartBadge) {
-
-            cartBadge.textContent =
-                count;
-
+            cartBadge.textContent = count;
         }
-
-
-        if (floatingCart) {
-
-            floatingCart.classList.toggle(
-                "has-items",
-                count > 0
-            );
-
-        }
-
-    }
-
-
-    /* =========================
-       ADD TO CART
-    ========================== */
-
-    function addToCart(product) {
-
-        if (!product || !product.id) {
-
-            console.error(
-                "بيانات المنتج غير صالحة:",
-                product
-            );
-
-            return;
-
-        }
-
-
-        const productId =
-            String(product.id);
-
-
-        const productPrice =
-            safeNumber(
-                product.price,
-                0
-            );
-
-
-        const existingProduct =
-            cart.find(
-                function (item) {
-
-                    return String(item.id) ===
-                        productId;
-
-                }
-            );
-
-
-        /*
-         * المنتج موجود مسبقًا
-         */
-
-        if (existingProduct) {
-
-            existingProduct.quantity =
-                safeNumber(
-                    existingProduct.quantity,
-                    0
-                ) + 1;
-
-
-            /*
-             * Analytics:
-             * إضافة كمية جديدة للمنتج
-             */
-
-            trackEvent(
-                "add_to_cart",
-                {
-                    currency: "SYP",
-
-                    value: productPrice,
-
-                    items: [
-                        {
-                            item_id: productId,
-
-                            item_name:
-                                String(
-                                    product.name ||
-                                    "منتج"
-                                ),
-
-                            price: productPrice,
-
-                            quantity: 1
-                        }
-                    ]
-                }
-            );
-
-        }
-
-
-        /*
-         * المنتج جديد
-         */
-
-        else {
-
-            cart.push({
-
-                id: productId,
-
-                name:
-                    String(
-                        product.name || "منتج"
-                    ),
-
-                price:
-                    productPrice,
-
-                image:
-                    product.image
-                        ? String(product.image)
-                        : "",
-
-                quantity: 1
-
-            });
-
-
-            /*
-             * Analytics:
-             * إضافة منتج جديد
-             */
-
-            trackEvent(
-                "add_to_cart",
-                {
-                    currency: "SYP",
-
-                    value: productPrice,
-
-                    items: [
-                        {
-                            item_id: productId,
-
-                            item_name:
-                                String(
-                                    product.name ||
-                                    "منتج"
-                                ),
-
-                            price: productPrice,
-
-                            quantity: 1
-                        }
-                    ]
-                }
-            );
-
-        }
-
-
-        renderCart();
-
-        showAddAnimation();
-
-    }
-
-
-    /* =========================
-       REMOVE PRODUCT
-    ========================== */
-
-    function removeFromCart(productId) {
-
-        const product =
-            cart.find(
-                function (item) {
-
-                    return String(item.id) ===
-                        String(productId);
-
-                }
-            );
-
-
-        /*
-         * تسجيل الحذف قبل حذف المنتج
-         */
-
-        if (product) {
-
-            trackEvent(
-                "remove_from_cart",
-                {
-                    currency: "SYP",
-
-                    value:
-                        safeNumber(
-                            product.price,
-                            0
-                        ) *
-                        safeNumber(
-                            product.quantity,
-                            1
-                        ),
-
-                    items: [
-                        {
-                            item_id:
-                                String(
-                                    product.id
-                                ),
-
-                            item_name:
-                                String(
-                                    product.name ||
-                                    "منتج"
-                                ),
-
-                            price:
-                                safeNumber(
-                                    product.price,
-                                    0
-                                ),
-
-                            quantity:
-                                safeNumber(
-                                    product.quantity,
-                                    1
-                                )
-                        }
-                    ]
-                }
-            );
-
-        }
-
-
-        cart = cart.filter(
-            function (item) {
-
-                return String(item.id) !==
-                    String(productId);
-
-            }
-        );
-
-
-        renderCart();
-
-    }
-
-
-    /* =========================
-       INCREASE QUANTITY
-    ========================== */
-
-    function increaseQuantity(productId) {
-
-        const product =
-            cart.find(
-                function (item) {
-
-                    return String(item.id) ===
-                        String(productId);
-
-                }
-            );
-
-
-        if (!product) {
-
-            return;
-
-        }
-
-
-        product.quantity =
-            safeNumber(
-                product.quantity,
-                0
-            ) + 1;
-
-
-        /*
-         * Analytics
-         */
-
-        trackEvent(
-            "quantity_change",
-            {
-                currency: "SYP",
-
-                change_type: "increase",
-
-                value:
-                    safeNumber(
-                        product.price,
-                        0
-                    ),
-
-                items: [
-                    {
-                        item_id:
-                            String(product.id),
-
-                        item_name:
-                            String(
-                                product.name ||
-                                "منتج"
-                            ),
-
-                        price:
-                            safeNumber(
-                                product.price,
-                                0
-                            ),
-
-                        quantity:
-                            product.quantity
-                    }
-                ]
-            }
-        );
-
-
-        renderCart();
-
-    }
-
-
-    /* =========================
-       DECREASE QUANTITY
-    ========================== */
-
-    function decreaseQuantity(productId) {
-
-        const product =
-            cart.find(
-                function (item) {
-
-                    return String(item.id) ===
-                        String(productId);
-
-                }
-            );
-
-
-        if (!product) {
-
-            return;
-
-        }
-
-
-        const currentQuantity =
-            safeNumber(
-                product.quantity,
-                1
-            );
-
-
-        if (currentQuantity > 1) {
-
-            product.quantity =
-                currentQuantity - 1;
-
-
-            /*
-             * Analytics
-             */
-
-            trackEvent(
-                "quantity_change",
-                {
-                    currency: "SYP",
-
-                    change_type: "decrease",
-
-                    value:
-                        safeNumber(
-                            product.price,
-                            0
-                        ),
-
-                    items: [
-                        {
-                            item_id:
-                                String(product.id),
-
-                            item_name:
-                                String(
-                                    product.name ||
-                                    "منتج"
-                                ),
-
-                            price:
-                                safeNumber(
-                                    product.price,
-                                    0
-                                ),
-
-                            quantity:
-                                product.quantity
-                        }
-                    ]
-                }
-            );
-
-
-            renderCart();
-
-        }
-
-
-        else {
-
-            removeFromCart(productId);
-
-        }
-
-    }
-
-
-    /* =========================
-       RENDER CART
-    ========================== */
-
-    function renderCart() {
-
-        if (!cartItems) {
-
-            return;
-
-        }
-
-
-        cartItems.innerHTML = "";
-
-
-        if (cart.length === 0) {
-
-            if (cartEmpty) {
-
-                cartEmpty.style.display =
-                    "flex";
-
-            }
-
-            cartItems.style.display =
-                "none";
-
-        }
-
-
-        else {
-
-            if (cartEmpty) {
-
-                cartEmpty.style.display =
-                    "none";
-
-            }
-
-
-            cartItems.style.display =
-                "flex";
-
-
-            cart.forEach(
-                function (item) {
-
-                    const cartItem =
-                        document.createElement("div");
-
-
-                    cartItem.className =
-                        "cart-item";
-
-
-                    const itemId =
-                        escapeHTML(
-                            item.id
-                        );
-
-
-                    const itemName =
-                        escapeHTML(
-                            item.name
-                        );
-
-
-                    const itemImage =
-                        escapeHTML(
-                            item.image
-                        );
-
-
-                    const price =
-                        safeNumber(
-                            item.price,
-                            0
-                        );
-
-
-                    const quantity =
-                        Math.max(
-                            1,
-                            safeNumber(
-                                item.quantity,
-                                1
-                            )
-                        );
-
-
-                    const itemTotal =
-                        price * quantity;
-
-
-                    const imageHTML =
-                        itemImage
-                            ? `
-                                <img
-                                    src="${itemImage}"
-                                    alt="${itemName}"
-                                    loading="lazy"
-                                    onerror="
-                                        this.style.display='none';
-                                        this.nextElementSibling.style.display='inline-flex';
-                                    "
-                                >
-
-                                <span
-                                    style="display:none;"
-                                    aria-hidden="true"
-                                >
-                                    🍔
-                                </span>
-                              `
-                            : `
-                                <span
-                                    aria-hidden="true"
-                                >
-                                    🍔
-                                </span>
-                              `;
-
-
-                    cartItem.innerHTML = `
-                        <div class="cart-item-image">
-
-                            ${imageHTML}
-
-                        </div>
-
-
-                        <div class="cart-item-info">
-
-                            <h4>
-                                ${itemName}
-                            </h4>
-
-
-                            <span class="cart-item-price">
-                                ${formatPrice(price)}
-                            </span>
-
-
-                            <div
-                                class="quantity-controls"
-                                aria-label="تعديل كمية ${itemName}"
-                            >
-
-                                <button
-                                    type="button"
-                                    class="quantity-btn increase-btn"
-                                    data-id="${itemId}"
-                                    aria-label="زيادة كمية ${itemName}"
-                                    title="زيادة الكمية"
-                                >
-                                    +
-                                </button>
-
-
-                                <span
-                                    class="quantity-number"
-                                    aria-live="polite"
-                                >
-                                    ${quantity}
-                                </span>
-
-
-                                <button
-                                    type="button"
-                                    class="quantity-btn decrease-btn"
-                                    data-id="${itemId}"
-                                    aria-label="إنقاص كمية ${itemName}"
-                                    title="إنقاص الكمية"
-                                >
-                                    −
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="cart-item-actions">
-
-                            <strong
-                                class="cart-item-total"
-                                title="إجمالي المنتج"
-                            >
-                                ${formatPrice(itemTotal)}
-                            </strong>
-
-
-                            <button
-                                type="button"
-                                class="remove-item"
-                                data-id="${itemId}"
-                                aria-label="حذف ${itemName} من السلة"
-                                title="حذف المنتج"
-                            >
-                                🗑️
-                            </button>
-
-                        </div>
-                    `;
-
-
-                    cartItems.appendChild(
-                        cartItem
-                    );
-
-                }
-            );
-
-        }
-
 
         if (cartTotal) {
-
-            cartTotal.textContent =
-                formatPrice(
-                    getCartTotal()
-                );
-
+            cartTotal.textContent = formatPrice(getCartTotal());
         }
 
-
-        updateCartCounter();
-
+        if (floatingCart) {
+            floatingCart.classList.remove("cart-bounce");
+            void floatingCart.offsetWidth;
+            floatingCart.classList.add("cart-bounce");
+        }
     }
 
+    /* =====================================================
+       10. فتح وإغلاق السلة
+    ===================================================== */
 
-    /* =========================
-       CART ITEM EVENTS
-       EVENT DELEGATION
-    ========================== */
+    function openCartPanel() {
+        if (!cartOverlay) return;
 
-    if (cartItems) {
+        cartOverlay.classList.add("show");
+        cartOverlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("cart-open");
+    }
 
-        cartItems.addEventListener(
-            "click",
-            function (event) {
+    function closeCartPanel() {
+        if (!cartOverlay) return;
 
-                const button =
-                    event.target.closest(
-                        "button"
-                    );
+        cartOverlay.classList.remove("show");
+        cartOverlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("cart-open");
+    }
 
+    if (floatingCart) {
+        floatingCart.addEventListener("click", openCartPanel);
+    }
 
-                if (!button) {
+    if (closeCartButton) {
+        closeCartButton.addEventListener("click", closeCartPanel);
+    }
 
-                    return;
-
-                }
-
-
-                const productId =
-                    button.dataset.id;
-
-
-                if (!productId) {
-
-                    return;
-
-                }
-
-
-                if (
-                    button.classList.contains(
-                        "increase-btn"
-                    )
-                ) {
-
-                    increaseQuantity(
-                        productId
-                    );
-
-                }
-
-
-                else if (
-                    button.classList.contains(
-                        "decrease-btn"
-                    )
-                ) {
-
-                    decreaseQuantity(
-                        productId
-                    );
-
-                }
-
-
-                else if (
-                    button.classList.contains(
-                        "remove-item"
-                    )
-                ) {
-
-                    removeFromCart(
-                        productId
-                    );
-
-                }
-
+    if (cartOverlay) {
+        cartOverlay.addEventListener("click", function (event) {
+            if (event.target === cartOverlay) {
+                closeCartPanel();
             }
-        );
-
+        });
     }
 
+    if (cartPanel) {
+        cartPanel.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+    }
 
-    /* =========================
-       ADD PRODUCT EVENTS
-    ========================== */
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeCartPanel();
+        }
+    });
 
-    const addButtons =
-        document.querySelectorAll(
+    /* =====================================================
+       11. إضافة المنتجات إلى السلة
+       السلة لا تفتح تلقائياً عند الإضافة
+    ===================================================== */
+
+    function addToCart(productCard) {
+        const id = productCard.dataset.id;
+        const name = productCard.dataset.name;
+        const price = safeNumber(productCard.dataset.price);
+        const image = productCard.dataset.image || "";
+
+        if (!id || !name || price < 0) return;
+
+        const existingItem = cart.find(item => item.id === id);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id,
+                name,
+                price,
+                image,
+                quantity: 1
+            });
+        }
+
+        trackEvent("add_to_cart", {
+            currency: "SYP",
+            value: price,
+            items: [{
+                item_id: id,
+                item_name: name,
+                price: price,
+                quantity: 1
+            }]
+        });
+
+        renderCart();
+    }
+
+    /* =====================================================
+       12. تأثير الزر الأخضر عند الإضافة
+    ===================================================== */
+
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest(
             ".add-to-cart-btn, .small-add-to-cart-btn, .drink-add-btn"
         );
 
+        if (!button) return;
 
-    addButtons.forEach(
-        function (button) {
+        const productCard = button.closest("[data-id][data-price]");
 
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const productElement =
-                        button.closest(
-                            ".product-card, .small-product, .drink-item"
-                        );
-
-
-                    if (!productElement) {
-
-                        console.error(
-                            "لم يتم العثور على عنصر المنتج."
-                        );
-
-                        return;
-
-                    }
-
-
-                    const product = {
-
-                        id:
-                            productElement.dataset.id,
-
-                        name:
-                            productElement.dataset.name,
-
-                        price:
-                            productElement.dataset.price,
-
-                        image:
-                            productElement.dataset.image || ""
-
-                    };
-
-
-                    if (
-                        !product.id ||
-                        !product.name ||
-                        product.price === undefined ||
-                        product.price === ""
-                    ) {
-
-                        console.error(
-                            "بيانات المنتج ناقصة:",
-                            product
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (
-                        !Number.isFinite(
-                            Number(product.price)
-                        )
-                    ) {
-
-                        console.error(
-                            "سعر المنتج غير صالح:",
-                            product
-                        );
-
-                        return;
-
-                    }
-
-
-                    addToCart(
-                        product
-                    );
-
-
-                    animateButton(
-                        button
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    /* =========================
-       CATEGORY ANALYTICS
-    ========================== */
-
-    const categoryLinks =
-        document.querySelectorAll(
-            ".categories .category"
-        );
-
-
-    categoryLinks.forEach(
-        function (categoryLink) {
-
-            categoryLink.addEventListener(
-                "click",
-                function () {
-
-                    const categoryName =
-                        categoryLink
-                            .querySelector("span:last-child");
-
-                    const categoryText =
-                        categoryName
-                            ? categoryName.textContent.trim()
-                            : categoryLink.textContent.trim();
-
-
-                    const categoryId =
-                        (
-                            categoryLink.getAttribute("href") ||
-                            ""
-                        ).replace("#", "");
-
-
-                    trackEvent(
-                        "category_click",
-                        {
-                            category_name:
-                                categoryText,
-
-                            category_id:
-                                categoryId
-                        }
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    /* =========================
-       ADD BUTTON ANIMATION
-    ========================== */
-
-    function animateButton(button) {
-
-        if (!button) {
-
+        if (!productCard) {
+            console.error("تعذر العثور على بطاقة المنتج.");
             return;
-
         }
 
+        addToCart(productCard);
 
-        const originalText =
-            button.innerHTML;
+        if (button.successTimeout) {
+            clearTimeout(button.successTimeout);
+        }
 
+        if (!button.dataset.originalContent) {
+            button.dataset.originalContent = button.innerHTML;
+        }
 
-        button.disabled = true;
+        button.classList.add("added-success");
+        button.innerHTML = '<span class="success-check">✓</span> تمت الإضافة';
 
+        button.style.setProperty("background-color", "#198754", "important");
+        button.style.setProperty("background", "#198754", "important");
+        button.style.setProperty("color", "#ffffff", "important");
+        button.style.setProperty("border-color", "#198754", "important");
 
-        button.classList.add(
-            "added"
-        );
+        button.successTimeout = setTimeout(function () {
+            button.classList.remove("added-success");
+            button.innerHTML = button.dataset.originalContent;
 
+            button.style.removeProperty("background-color");
+            button.style.removeProperty("background");
+            button.style.removeProperty("color");
+            button.style.removeProperty("border-color");
 
-        button.innerHTML =
-            "✓ تمت الإضافة";
+            button.successTimeout = null;
+        }, 1500);
+    });
 
+    /* =====================================================
+       13. عرض محتويات السلة
+    ===================================================== */
 
-        setTimeout(
-            function () {
+    function renderCart() {
+        if (!cartItemsElement) return;
 
-                button.innerHTML =
-                    originalText;
+        const isEmpty = cart.length === 0;
 
+        if (cartEmpty) {
+            cartEmpty.style.display = isEmpty ? "flex" : "none";
+        }
 
-                button.classList.remove(
-                    "added"
-                );
+        cartItemsElement.style.display = isEmpty ? "none" : "flex";
 
-
-                button.disabled =
-                    false;
-
-            },
-            1200
-        );
-
-    }
-
-
-    /* =========================
-       CART ADD ANIMATION
-    ========================== */
-
-    function showAddAnimation() {
-
-        if (!floatingCart) {
-
+        if (isEmpty) {
+            cartItemsElement.innerHTML = "";
+            updateCartCounter();
             return;
-
         }
 
+        cartItemsElement.innerHTML = cart.map(item => `
+            <div class="cart-item" data-id="${escapeHTML(item.id)}">
 
-        floatingCart.classList.remove(
-            "cart-bounce"
-        );
-
-
-        void floatingCart.offsetWidth;
-
-
-        floatingCart.classList.add(
-            "cart-bounce"
-        );
-
-
-        setTimeout(
-            function () {
-
-                floatingCart.classList.remove(
-                    "cart-bounce"
-                );
-
-            },
-            500
-        );
-
-    }
-
-
-    /* =========================
-       OPEN CART
-    ========================== */
-
-    if (floatingCart) {
-
-        floatingCart.addEventListener(
-            "click",
-            function () {
-
-                if (!cartOverlay) {
-
-                    return;
-
-                }
-
-
-                renderCart();
-
-
-                /*
-                 * Analytics:
-                 * فتح السلة
-                 */
-
-                trackEvent(
-                    "view_cart",
-                    {
-                        currency: "SYP",
-
-                        value:
-                            getCartTotal(),
-
-                        items:
-                            getAnalyticsItems()
+                <div class="cart-item-image">
+                    ${
+                        item.image
+                            ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">`
+                            : `<span>🍔</span>`
                     }
-                );
+                </div>
 
+                <div class="cart-item-info">
+                    <h4>${escapeHTML(item.name)}</h4>
 
-                cartOverlay.classList.add(
-                    "show"
-                );
+                    <span class="cart-item-price">
+                        ${formatPrice(item.price)}
+                    </span>
 
+                    <div class="quantity-controls">
+                        <button
+                            class="quantity-btn"
+                            type="button"
+                            data-action="increase"
+                            aria-label="زيادة الكمية">+</button>
 
-                document.body.style.overflow =
-                    "hidden";
+                        <span class="quantity-number">${item.quantity}</span>
 
+                        <button
+                            class="quantity-btn"
+                            type="button"
+                            data-action="decrease"
+                            aria-label="إنقاص الكمية">−</button>
+                    </div>
+                </div>
+
+                <div class="cart-item-actions">
+                    <strong>${formatPrice(item.price * item.quantity)}</strong>
+
+                    <button
+                        class="remove-item"
+                        type="button"
+                        data-action="remove"
+                        aria-label="حذف ${escapeHTML(item.name)}">✕</button>
+                </div>
+            </div>
+        `).join("");
+
+        updateCartCounter();
+    }
+
+    /* =====================================================
+       14. التحكم بكميات السلة
+    ===================================================== */
+
+    if (cartItemsElement) {
+        cartItemsElement.addEventListener("click", function (event) {
+            const button = event.target.closest("[data-action]");
+
+            if (!button) return;
+
+            const row = button.closest(".cart-item");
+            if (!row) return;
+
+            const item = cart.find(product => product.id === row.dataset.id);
+            if (!item) return;
+
+            const action = button.dataset.action;
+
+            if (action === "increase") {
+                item.quantity += 1;
             }
-        );
 
-    }
+            if (action === "decrease") {
+                item.quantity -= 1;
 
-
-    /* =========================
-       CLOSE CART
-    ========================== */
-
-    if (closeCart) {
-
-        closeCart.addEventListener(
-            "click",
-            closeCartPanel
-        );
-
-    }
-
-
-    if (cartOverlay) {
-
-        cartOverlay.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    event.target ===
-                    cartOverlay
-                ) {
-
-                    closeCartPanel();
-
+                if (item.quantity <= 0) {
+                    cart = cart.filter(product => product.id !== item.id);
                 }
-
-            }
-        );
-
-    }
-
-
-    function closeCartPanel() {
-
-        if (cartOverlay) {
-
-            cartOverlay.classList.remove(
-                "show"
-            );
-
-        }
-
-
-        document.body.style.overflow =
-            "";
-
-    }
-
-
-    /* =========================
-       ESC KEY - CLOSE CART
-    ========================== */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                cartOverlay &&
-                cartOverlay.classList.contains(
-                    "show"
-                )
-            ) {
-
-                closeCartPanel();
-
             }
 
-        }
-    );
-
-
-    /* =========================
-       GET CUSTOMER DATA
-    ========================== */
-
-    function getCustomerData() {
-
-        const customerNameElement =
-            document.getElementById(
-                "customerName"
-            );
-
-
-        const customerPhoneElement =
-            document.getElementById(
-                "customerPhone"
-            );
-
-
-        const customerAddressElement =
-            document.getElementById(
-                "customerAddress"
-            );
-
-
-        const customerNotesElement =
-            document.getElementById(
-                "customerNotes"
-            );
-
-
-        return {
-
-            name:
-                customerNameElement
-                    ? customerNameElement.value.trim()
-                    : "",
-
-            phone:
-                customerPhoneElement
-                    ? customerPhoneElement.value.trim()
-                    : "",
-
-            address:
-                customerAddressElement
-                    ? customerAddressElement.value.trim()
-                    : "",
-
-            notes:
-                customerNotesElement
-                    ? customerNotesElement.value.trim()
-                    : "",
-
-            nameElement:
-                customerNameElement,
-
-            phoneElement:
-                customerPhoneElement,
-
-            addressElement:
-                customerAddressElement,
-
-            notesElement:
-                customerNotesElement
-
-        };
-
-    }
-
-
-    /* =========================
-       VALIDATE CUSTOMER DATA
-    ========================== */
-
-    function validateCustomerData(customer) {
-
-        if (!customer.name) {
-
-            alert(
-                "يرجى إدخال الاسم"
-            );
-
-
-            if (customer.nameElement) {
-
-                customer.nameElement.focus();
-
+            if (action === "remove") {
+                cart = cart.filter(product => product.id !== item.id);
             }
-
-
-            return false;
-
-        }
-
-
-        if (!customer.phone) {
-
-            alert(
-                "يرجى إدخال رقم الهاتف"
-            );
-
-
-            if (customer.phoneElement) {
-
-                customer.phoneElement.focus();
-
-            }
-
-
-            return false;
-
-        }
-
-
-        if (!customer.address) {
-
-            alert(
-                "يرجى إدخال عنوان التوصيل"
-            );
-
-
-            if (customer.addressElement) {
-
-                customer.addressElement.focus();
-
-            }
-
-
-            return false;
-
-        }
-
-
-        return true;
-
-    }
-
-
-    /* =========================
-       BUILD WHATSAPP MESSAGE
-    ========================== */
-
-    function buildWhatsAppMessage(customer) {
-
-        let message =
-            "🍔 *طلب جديد - مولانا برغر*\n\n";
-
-
-        message +=
-            "━━━━━━━━━━━━━━\n\n";
-
-
-        message +=
-            "👤 *العميل:*\n" +
-            customer.name +
-            "\n\n";
-
-
-        message +=
-            "📱 *الهاتف:*\n" +
-            customer.phone +
-            "\n\n";
-
-
-        message +=
-            "📍 *العنوان:*\n" +
-            customer.address +
-            "\n\n";
-
-
-        message +=
-            "━━━━━━━━━━━━━━\n\n";
-
-
-        message +=
-            "🛒 *تفاصيل الطلب:*\n\n";
-
-
-        cart.forEach(
-            function (item, index) {
-
-                const price =
-                    safeNumber(
-                        item.price,
-                        0
-                    );
-
-
-                const quantity =
-                    safeNumber(
-                        item.quantity,
-                        1
-                    );
-
-
-                const itemTotal =
-                    price * quantity;
-
-
-                message +=
-                    `${index + 1}️⃣ *${item.name}*\n`;
-
-
-                message +=
-                    `الكمية: ${quantity}\n`;
-
-
-                message +=
-                    `سعر القطعة: ${formatPrice(price)}\n`;
-
-
-                message +=
-                    `الإجمالي: ${formatPrice(itemTotal)}\n\n`;
-
-            }
-        );
-
-
-        message +=
-            "━━━━━━━━━━━━━━\n\n";
-
-
-        message +=
-            "💰 *الإجمالي النهائي:*\n" +
-            formatPrice(
-                getCartTotal()
-            ) +
-            "\n\n";
-
-
-        if (customer.notes) {
-
-            message +=
-                "📝 *ملاحظات:*\n" +
-                customer.notes +
-                "\n\n";
-
-        }
-
-
-        message +=
-            "━━━━━━━━━━━━━━\n\n";
-
-
-        message +=
-            "🍔 شكراً لاختياركم مولانا برغر 🤍";
-
-
-        return message;
-
-    }
-
-
-    /* =========================
-       SEND ORDER TO WHATSAPP
-    ========================== */
-
-    if (whatsappOrder) {
-
-        whatsappOrder.addEventListener(
-            "click",
-            sendToWhatsApp
-        );
-
-    }
-
-
-    function sendToWhatsApp() {
-
-        /*
-         * التأكد من وجود طلب
-         */
-
-        if (cart.length === 0) {
-
-            /*
-             * Analytics:
-             * محاولة طلب بدون منتجات
-             */
-
-            trackEvent(
-                "empty_order_attempt"
-            );
-
-
-            alert(
-                "سلة الطلب فارغة 🛒\n\nأضف المنتجات أولاً."
-            );
-
-            return;
-
-        }
-
-
-        /*
-         * الحصول على بيانات الزبون
-         */
-
-        const customer =
-            getCustomerData();
-
-
-        /*
-         * التحقق من بيانات الزبون
-         */
-
-        if (
-            !validateCustomerData(
-                customer
-            )
-        ) {
-
-            /*
-             * لا نرسل أي بيانات شخصية إلى Analytics.
-             */
-
-            return;
-
-        }
-
-
-        /*
-         * Analytics:
-         * بدأ المستخدم عملية الطلب
-         *
-         * ملاحظة:
-         * لا نرسل بيانات الزبون.
-         */
-
-        trackEvent(
-            "begin_checkout",
-            {
-                currency: "SYP",
-
-                value:
-                    getCartTotal(),
-
-                items:
-                    getAnalyticsItems()
-            }
-        );
-
-
-        /*
-         * حفظ بيانات Analytics قبل تفريغ السلة
-         */
-
-        const analyticsItems =
-            getAnalyticsItems();
-
-        const analyticsTotal =
-            getCartTotal();
-
-        const analyticsItemCount =
-            getCartCount();
-
-
-        /*
-         * بناء رسالة واتساب
-         */
-
-        const message =
-            buildWhatsAppMessage(
-                customer
-            );
-
-
-        /*
-         * إنشاء رابط واتساب
-         */
-
-        const whatsappURL =
-            `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-
-        /*
-         * فتح واتساب
-         */
-
-        const whatsappWindow =
-            window.open(
-                whatsappURL,
-                "_blank",
-                "noopener,noreferrer"
-            );
-
-
-        /*
-         * إذا نجح فتح واتساب
-         */
-
-        if (whatsappWindow) {
-
-            /*
-             * Analytics:
-             * تم الوصول فعليًا إلى خطوة إرسال الطلب
-             */
-
-            trackEvent(
-                "whatsapp_order",
-                {
-                    currency: "SYP",
-
-                    value:
-                        analyticsTotal,
-
-                    items_count:
-                        analyticsItemCount,
-
-                    items:
-                        analyticsItems,
-
-                    order_channel:
-                        "whatsapp"
-                }
-            );
-
-
-            /*
-             * تفريغ السلة
-             */
-
-            cart = [];
-
 
             renderCart();
+        });
+    }
 
+    /* =====================================================
+       15. بيانات العميل
+    ===================================================== */
 
-            clearCustomerForm();
+    function getCustomerData() {
+        return {
+            name: $("#customerName")?.value.trim() || "",
+            phone: $("#customerPhone")?.value.trim() || "",
+            address: $("#customerAddress")?.value.trim() || "",
+            notes: $("#customerNotes")?.value.trim() || ""
+        };
+    }
 
-
-            closeCartPanel();
-
-
-            setTimeout(
-                function () {
-
-                    alert(
-                        "تم تجهيز طلبك بنجاح ✅\n\nتم فتح واتساب لإرسال الطلب.\n\nيمكنك التواصل معنا عبر واتساب إذا أردت إجراء أي تعديل."
-                    );
-
-                },
-                250
-            );
-
+    function validateCustomerData(customer) {
+        if (!customer.name) {
+            alert("يرجى إدخال الاسم.");
+            $("#customerName")?.focus();
+            return false;
         }
 
+        if (!customer.phone) {
+            alert("يرجى إدخال رقم الهاتف.");
+            $("#customerPhone")?.focus();
+            return false;
+        }
 
-        /*
-         * إذا منع المتصفح فتح واتساب
-         */
+        if (!customer.address) {
+            alert("يرجى إدخال عنوان التوصيل.");
+            $("#customerAddress")?.focus();
+            return false;
+        }
 
-        else {
+        return true;
+    }
 
-            /*
-             * Analytics:
-             * تعذر فتح واتساب
-             */
+    /* =====================================================
+       16. إنشاء رسالة واتساب
+    ===================================================== */
 
-            trackEvent(
-                "whatsapp_open_failed",
-                {
-                    currency: "SYP",
+    function buildWhatsAppMessage(customer) {
+        let message = "🍔 *طلب جديد - مولانا برغر*\n\n";
 
-                    value:
-                        analyticsTotal,
+        message += `👤 *اسم العميل:*\n${customer.name}\n\n`;
+        message += `📱 *رقم الهاتف:*\n${customer.phone}\n\n`;
+        message += `📍 *عنوان التوصيل:*\n${customer.address}\n\n`;
+        message += "━━━━━━━━━━━━━━\n";
+        message += "🛒 *تفاصيل الطلب:*\n\n";
 
-                    items_count:
-                        analyticsItemCount
-                }
-            );
+        cart.forEach((item, index) => {
+            message += `${index + 1}. *${item.name}*\n`;
+            message += `الكمية: ${item.quantity}\n`;
+            message += `سعر القطعة: ${formatPrice(item.price)}\n`;
+            message += `الإجمالي: ${formatPrice(item.price * item.quantity)}\n\n`;
+        });
 
+        message += "━━━━━━━━━━━━━━\n";
+        message += `💰 *الإجمالي النهائي: ${formatPrice(getCartTotal())}*\n\n`;
 
+        if (customer.notes) {
+            message += `📝 *ملاحظات العميل:*\n${customer.notes}\n\n`;
+        }
+
+        message += "🤍 شكراً لاختياركم مولانا برغر";
+
+        return message;
+    }
+
+    /* =====================================================
+       17. إرسال الطلب إلى واتساب
+    ===================================================== */
+
+    function sendToWhatsApp() {
+        if (cart.length === 0) {
+            trackEvent("empty_order_attempt");
+            alert("سلة الطلب فارغة 🛒\n\nأضف المنتجات أولاً.");
+            return;
+        }
+
+        const customer = getCustomerData();
+
+        if (!validateCustomerData(customer)) return;
+
+        const total = getCartTotal();
+        const message = buildWhatsAppMessage(customer);
+
+        const url =
+            `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+        trackEvent("begin_checkout", {
+            currency: "SYP",
+            value: total,
+            items: cart.map(item => ({
+                item_id: item.id,
+                item_name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            }))
+        });
+
+        const whatsappWindow = window.open(url, "_blank");
+
+        if (!whatsappWindow) {
             alert(
-                "تعذر فتح واتساب تلقائيًا.\n\nيرجى السماح بالنوافذ المنبثقة لهذا الموقع ثم المحاولة مرة أخرى."
+                "تعذر فتح واتساب. اسمح بالنوافذ المنبثقة في المتصفح ثم حاول مجدداً."
             );
-
+            return;
         }
 
+        trackEvent("whatsapp_order", {
+            currency: "SYP",
+            value: total,
+            items_count: getCartCount(),
+            order_channel: "whatsapp"
+        });
     }
 
-
-    /* =========================
-       CLEAR CUSTOMER FORM
-    ========================== */
-
-    function clearCustomerForm() {
-
-        const customerName =
-            document.getElementById(
-                "customerName"
-            );
-
-
-        const customerPhone =
-            document.getElementById(
-                "customerPhone"
-            );
-
-
-        const customerAddress =
-            document.getElementById(
-                "customerAddress"
-            );
-
-
-        const customerNotes =
-            document.getElementById(
-                "customerNotes"
-            );
-
-
-        if (customerName) {
-
-            customerName.value = "";
-
-        }
-
-
-        if (customerPhone) {
-
-            customerPhone.value = "";
-
-        }
-
-
-        if (customerAddress) {
-
-            customerAddress.value = "";
-
-        }
-
-
-        if (customerNotes) {
-
-            customerNotes.value = "";
-
-        }
-
+    if (whatsappOrder) {
+        whatsappOrder.addEventListener("click", sendToWhatsApp);
     }
 
+    /* =====================================================
+       18. إضاءة زر قسم المنيو عند الضغط عليه
+       تنتقل الإضاءة من الزر السابق إلى الزر المحدد
+    ===================================================== */
 
-    /* =========================
-       EDIT ORDER VIA WHATSAPP
-    ========================== */
+    const categoryButtons = document.querySelectorAll(".category");
 
-    const editOrderWhatsApp =
-        document.getElementById(
-            "editOrderWhatsApp"
-        );
+    function activateCategory(selectedButton) {
+        categoryButtons.forEach(function (button) {
+            const isSelected = button === selectedButton;
 
+            button.classList.toggle("active", isSelected);
 
-    if (editOrderWhatsApp) {
-
-        editOrderWhatsApp.addEventListener(
-            "click",
-            function () {
-
-                /*
-                 * Analytics:
-                 * طلب تعديل عبر WhatsApp
-                 */
-
-                trackEvent(
-                    "edit_order_whatsapp",
-                    {
-                        order_channel:
-                            "whatsapp"
-                    }
-                );
-
-
-                const message =
-                    "مرحباً مولانا برغر 👋\n\n" +
-                    "أرغب بتعديل طلبي الذي أرسلته مسبقاً عبر واتساب.\n\n" +
-                    "يرجى مساعدتي في تعديل الطلب.\n\n" +
-                    "شكراً لكم 🤍";
-
-
-                const whatsappURL =
-                    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-
-                window.open(
-                    whatsappURL,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-
+            if (isSelected) {
+                button.setAttribute("aria-current", "true");
+            } else {
+                button.removeAttribute("aria-current");
             }
-        );
-
+        });
     }
 
+    categoryButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            activateCategory(button);
+        });
+    });
 
-    /* =========================
-       INITIAL LOAD
-    ========================== */
-
-    cart = [];
-
+    /* =====================================================
+       19. التهيئة الأولية
+    ===================================================== */
 
     renderCart();
-
-
     updateCartCounter();
 
 });
